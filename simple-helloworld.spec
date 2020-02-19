@@ -7,7 +7,7 @@ Summary:        A hello world program
 
 License:        Apache
 URL:            http://git.ovh.iot/redpesk/simple-helloworld
-Source0:        simple-helloworld-1.0.tar.gz
+Source:         %{name}-%{version}.tar.gz
 
 BuildRequires: gcc
 
