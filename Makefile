@@ -2,7 +2,7 @@ DESTDIR ?=
 PREFIX ?= /usr
 
 helloworld:
-	$cc main.c -o helloworld
+	$CC main.c -o helloworld
 
 install: helloworld
 	install -m 0755 -d $(DESTDIR)$(PREFIX)/bin
