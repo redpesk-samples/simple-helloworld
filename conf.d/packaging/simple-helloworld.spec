@@ -14,6 +14,13 @@ BuildRequires: gcc
 %description
 The most simple hello program of the world !
 
+%package redtest
+Summary:        Redtest subpackage of simple helloworld package
+Requires:       %{name} = %{version}
+
+%description redtest
+The tests for the most simple hello program of the world !
+
 %prep
 %setup
 
@@ -28,3 +35,6 @@ rm -rf %{buildroot}
 
 %files
 %{_bindir}/helloworld
+
+%files redtest
+%{_libexecdir}/redtest/%{name}/*

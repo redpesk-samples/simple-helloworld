@@ -1,0 +1,69 @@
+#!/bin/bash
+
+# Path where the script is installed
+FULL_TEST_PATH="/usr/libexec/redtest/simple-helloworld/"
+# Path where the logs need to be stored
+FULL_LOGS_PATH="/var/log/redtest/simple-helloworld/"
+
+# Variables used for TAP generation
+TAP_COUNTER=0
+TAP_FILE="${FULL_LOGS_PATH}simple-helloworld.tap"
+TAP_FILE_CONTENT=""
+
+# Function used to update the TAP file used as result
+updatetap()
+{
+	# Get the given parameters
+	test_def="$1"
+	test_result="$2"
+
+	# Increment counter
+	let TAP_COUNTER++
+
+	if [ $test_result -eq 0 ]
+	then
+		line="ok $TAP_COUNTER - $test_def\n"
+	else
+		line="not ok $TAP_COUNTER - $test_def\n"
+	fi
+
+	# Add a new line to the file to write
+	TAP_FILE_CONTENT="${TAP_FILE_CONTENT}${line}"
+
+    # Print line for live info
+    echo "$line"
+}
+
+# Function used to write the TAP file
+finalizetap()
+{
+	echo "1..$TAP_COUNTER" > $TAP_FILE
+	printf "$TAP_FILE_CONTENT" >> $TAP_FILE
+}
+
+echo "Starting tests for simple-helloworld package"
+
+# First create the logs directory
+mkdir -p $FULL_LOGS_PATH
+
+# Run the tests
+# Get the output of our binary
+output=$(helloworld)
+
+# TEST 1: check that the output contains 'Hi'
+echo "$output" | grep "Hi" -q
+updatetap "Test if output contains 'Hi'" "$?"
+
+# TEST 2: check that the output contains 'World'
+echo "$output" | grep "World" -q
+updatetap "Test if output contains 'World'" "$?"
+
+# TEST 3: check that the output contains 'helloworld'
+echo "$output" | grep "helloworld" -q
+updatetap "Test if output contains 'helloworld'" "$?"
+
+# Create the TAP file as output
+finalizetap
+
+# End of the test
+exit 0
